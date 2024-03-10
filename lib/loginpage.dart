@@ -10,7 +10,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center( // Centering the entire content vertically and horizontally
+      body: Center( 
         child: Stack(
           fit: StackFit.expand,
           children: [
