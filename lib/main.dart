@@ -42,7 +42,7 @@ class SplashScreenPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 105,
+            bottom: 175,
             left: 0,
             right: 0,
             child: Center(
@@ -62,9 +62,9 @@ class SplashScreenPage extends StatelessWidget {
                   overlayColor: MaterialStateProperty.resolveWith<Color>(
                         (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed)) {
-                        return Colors.orange; // Change to the color you want when pressed
+                        return Color(0xFFFFB12B);
                       }
-                      return Color(0xFF472bad); // Use the existing color when not pressed
+                      return Color(0xFF472bad);
                     },
                   ),
                 ),

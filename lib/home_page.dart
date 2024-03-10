@@ -1,29 +1,26 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
+  final String title;
+
+  const HomePage({Key? key, required this.title}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Page'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Welcome to the Home Page!',
-              style: TextStyle(fontSize: 24),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/home page.png'),
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
+              ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Implement any action you want to perform
-              },
-              child: Text('Logout'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

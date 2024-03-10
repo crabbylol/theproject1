@@ -64,6 +64,12 @@ flutter:
   assets:
   - assets/splash screen.png
   - assets/login page.png
+  - assets/1.png
+  - assets/2.png
+  - assets/3.png
+  - assets/loading.gif
+  - assets/signuploading.gif
+  - assets/home page.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
