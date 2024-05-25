@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'loginpage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-Future main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
     await Firebase.initializeApp(
@@ -18,7 +18,16 @@ Future main() async {
       )
     ) ;
   } else {
-    Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey:
+        "AIzaSyD2DO7pPZLT0otndA2XnXj6nC7ryvVfm98", // paste your api key here
+        appId:
+        "1:819941299504:android:818ae67d2af4adc3d3a4f5", //paste your app id here
+        messagingSenderId: "819941299504", //paste your messagingSenderId here
+        projectId: "theproject1-e7869", //paste your project id here
+      ),
+    );
   }
 
   runApp(MaterialApp(
