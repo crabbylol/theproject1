@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
+import 'journal.dart';
+import 'loginpage.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -42,28 +44,54 @@ class _SignupPageState extends State<SignupPage> {
             child: Center(
               child: Transform.translate(
                 offset: Offset(isTextFieldFocused ? ((MediaQuery.of(context).size.width - 300) / 2) : 0, 0),
-                child: Text(
-                  'Sign Up',
-                  style: TextStyle(
-                    fontSize: isTextFieldFocused ? 45 : 55, // Adjusted font size based on focus
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFFFFB12B),
+                  child: Text(
+                    'Sign Up',
+                    style: GoogleFonts.rubik(
+                      fontSize: isTextFieldFocused ? 45 : 55,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFFFFB12B),
+                    ),
                   ),
-                ),
               ),
             ),
           ),
           Positioned(
-            bottom: 125,
+            bottom: 85,
             left: 40,
             right: 40,
             child: Column(
-              children: [
+              children: <Widget>[
                 TextField(
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: 'Username',
+                    labelStyle: GoogleFonts.rubik (
+                      fontSize: 20,
+                    ),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      isTextFieldFocused = true;
+                    });
+                  },
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  onSubmitted: (value) {
+                    setState(() {
+                      isTextFieldFocused = false;
+                    });
+                  },
+                ),
+                TextField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Email',
+                    labelStyle: GoogleFonts.rubik(
+                      fontSize: 20,
+                    )
                   ),
                   onTap: () {
                     setState(() {
@@ -79,12 +107,14 @@ class _SignupPageState extends State<SignupPage> {
                     });
                   },
                 ),
-                const SizedBox(height: 20),
                 TextField(
                   obscureText: true,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Password',
+                      labelStyle: GoogleFonts.rubik(
+                        fontSize: 20,
+                      ),
                   ),
                   onTap: () {
                     setState(() {
@@ -100,25 +130,59 @@ class _SignupPageState extends State<SignupPage> {
                     });
                   },
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomePage(title: "Home Page")),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF482BAD),
-                  ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(color: Color(0xFFFFFCF2)),
-                  ),
-                  ),
-              ],
-            ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFFB12B),
+                        ),
+                        child: Text(
+                          'Back',
+                          style: GoogleFonts.rubik(
+                            fontSize: 25,
+                            color: Color(0xFFFFFCF2),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const JournalPage(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF482BAD),
+                        ),
+                        child: Text(
+                          'Login',
+                          style: GoogleFonts.rubik(
+                            fontSize: 25,
+                            color: const Color(0xFFFFFCF2),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ]
+            )
           ),
         ],
       ),

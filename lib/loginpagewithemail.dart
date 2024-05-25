@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'home_page.dart';
+import 'journal.dart';
 import 'toast.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'loginpage.dart';
-import 'package:theproject1/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPageWithEmail extends StatefulWidget {
   const LoginPageWithEmail({super.key});
@@ -51,7 +49,7 @@ class _LoginPageWithEmailState extends State<LoginPageWithEmail> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        children: [
+        children: <Widget>[
           Container(
             height: double.infinity,
             width: double.infinity,
@@ -72,35 +70,38 @@ class _LoginPageWithEmailState extends State<LoginPageWithEmail> {
             ),
           ),
           Positioned(
-            top: isTextFieldFocused ? MediaQuery.of(context).size.height * 0.153 : MediaQuery.of(context).size.height * 0.48,
-            left: isTextFieldFocused ? 0 : (MediaQuery.of(context).size.width - 300) / 2,
-            right: isTextFieldFocused ? 0 : (MediaQuery.of(context).size.width - 300) / 2,
+            top: isTextFieldFocused ? MediaQuery.of(context).size.height * 0.153 : MediaQuery.of(context).size.height * 0.52,
+            left: isTextFieldFocused ? 0 : (MediaQuery.of(context).size.width - 380) / 2,
+            right: isTextFieldFocused ? 0 : (MediaQuery.of(context).size.width - 380) / 2,
             child: Center(
               child: Transform.translate(
                 offset: Offset(isTextFieldFocused ? ((MediaQuery .of(context).size.width - 300) / 2) : 0, 0),
                 child: Text(
                   'Login with Email',
-                  style: TextStyle(
+                  style: GoogleFonts.rubik(
                     fontSize: isTextFieldFocused ? 25 : 40,
                     // Adjusted font size based on focus
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFFFB12B),
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFFFFB12B),
                   ),
                 ),
               ),
             ),
           ),
           Positioned(
-            bottom: 125,
+            bottom: 100,
             left: 40,
             right: 40,
             child: Column(
-              children: [
+              children: <Widget>[
                 TextField(
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
                     labelText: 'Email',
+                      labelStyle: GoogleFonts.rubik(
+                      fontSize: 20,
+                      )
                   ),
                   onTap: () {
                     setState(() {
@@ -119,9 +120,12 @@ class _LoginPageWithEmailState extends State<LoginPageWithEmail> {
                 const SizedBox(height: 20),
                 TextField(
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
                     labelText: 'Password',
+                      labelStyle: GoogleFonts.rubik(
+                        fontSize: 20,
+                      )
                   ),
                   onTap: () {
                     setState(() {
@@ -138,21 +142,56 @@ class _LoginPageWithEmailState extends State<LoginPageWithEmail> {
                   },
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomePage(title: "Home Page")),
-                      );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF482BAD),
-                  ),
-                  child: const Text(
-                    'Sign Up',
-                    style: TextStyle(color: Color(0xFFFFFCF2)),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFFB12B),
+                        ),
+                        child: Text(
+                          'Back',
+                          style: GoogleFonts.rubik(
+                            fontSize: 25,
+                            color: Color(0xFFFFFCF2),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const JournalPage(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF482BAD),
+                        ),
+                        child: Text(
+                          'Login',
+                          style: GoogleFonts.rubik(
+                            fontSize: 25,
+                            color: const Color(0xFFFFFCF2),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

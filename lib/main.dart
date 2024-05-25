@@ -16,8 +16,11 @@ Future main() async {
           appId: "1:819941299504:web:7939a961960d1ba7d3a4f5",
           measurementId: "G-GKL14CYFLP"
       )
-    );
+    ) ;
+  } else {
+    Firebase.initializeApp();
   }
+
   runApp(MaterialApp(
     home: SplashScreenPage(),
   ));
@@ -28,6 +31,8 @@ class SplashScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -48,23 +53,23 @@ class SplashScreenPage extends StatelessWidget {
             child: Center(
               child: ElevatedButton(
                 onPressed: () {
-                  Future.delayed(const Duration(milliseconds: 350), () {
+                  Future.delayed(const Duration(milliseconds: 100), () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPage(title: "Login Page")),
+                      MaterialPageRoute(builder: (context) => const LoginPage()),
                     );
                   });
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                    Color(0xFF472bad),
+                    const Color(0xFF472bad),
                   ),
                   overlayColor: MaterialStateProperty.resolveWith<Color>(
                         (Set<MaterialState> states) {
                       if (states.contains(MaterialState.pressed)) {
-                        return Color(0xFFFFB12B);
+                        return const Color(0xFFFFB12B);
                       }
-                      return Color(0xFF472bad);
+                      return const Color(0xFF472bad);
                     },
                   ),
                 ),
