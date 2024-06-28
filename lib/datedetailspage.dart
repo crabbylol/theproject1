@@ -32,14 +32,18 @@ class _DateDetailsPageState extends State<DateDetailsPage> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '${DateFormat('EEEE').format(DateTime(widget.day.year, widget.day.month, widget.day.date))}, ${widget.day.date} ${DateFormat('MMMM').format(DateTime(widget.day.year, widget.day.month, widget.day.date))}:',
-                      style: GoogleFonts.rubik(
-                        fontSize: 41.0,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w400,
-                        color: const Color(0xFF110340),
-                      ),
+                    Wrap(
+                      children: [
+                        Text(
+                          '${DateFormat('E, MMM d, yyyy').format(DateTime(widget.day.year, widget.day.month, widget.day.date))}:',
+                          style: GoogleFonts.rubik(
+                            fontSize: 35.0,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w400,
+                            color: const Color(0xFF110340),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

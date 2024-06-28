@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:theproject1/auth_service.dart';
 import 'journal.dart';
-import 'toast.dart';
 import 'loginpage.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPageWithEmail extends StatefulWidget {
+
   const LoginPageWithEmail({super.key});
 
   @override
@@ -13,9 +14,8 @@ class LoginPageWithEmail extends StatefulWidget {
 }
 
 class _LoginPageWithEmailState extends State<LoginPageWithEmail> {
-  // bool _isSigning = false;
-  // final FirebaseAuthService _auth = FirebaseAuthService();
-  // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final _auth = AuthService();
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool isTextFieldFocused = false;
@@ -95,6 +95,7 @@ class _LoginPageWithEmailState extends State<LoginPageWithEmail> {
             child: Column(
               children: <Widget>[
                 TextField(
+                  controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
@@ -119,6 +120,7 @@ class _LoginPageWithEmailState extends State<LoginPageWithEmail> {
                 ),
                 const SizedBox(height: 20),
                 TextField(
+                  controller: _passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
@@ -199,5 +201,19 @@ class _LoginPageWithEmailState extends State<LoginPageWithEmail> {
         ],
       ),
     );
+  }
+
+  goToHome(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const JournalPage())
+  );
+
+  _login() async {
+    final user = await _auth.loginUserWithEmailAndPassword(_emailController.text, _passwordController.text);
+
+    if (user != null) {
+      print("User logged in successfully");
+      goToHome(context);
+    }
   }
 }

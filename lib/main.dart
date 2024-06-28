@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:theproject1/wrapper.dart';
 import 'loginpage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -31,7 +32,7 @@ void main() async {
   }
 
   runApp(MaterialApp(
-    home: SplashScreenPage(),
+    home: Wrapper(),
   ));
 }
 

@@ -22,71 +22,54 @@ class _PastJournalEntryPage extends State<PastJournalEntryPage> {
             color: const Color(0xFFFFFCF2),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 25, left:15.0, right:15.0),
-            child: FractionallySizedBox(
-              heightFactor: 0.3,
-              widthFactor: 0.7,
-              alignment: FractionalOffset.topRight,
-              child: Stack(
-                children: [
-                  Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${DateFormat('EEEE').format(DateTime(widget.day.year, widget.day.month, widget.day.date))},${widget.day.date} ${DateFormat('MMMM').format(DateTime(widget.day.year, widget.day.month, widget.day.date))}:',
-                        style: GoogleFonts.rubik(
-                          fontSize: 20.0,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w400,
-                          color: const Color(0xFF110340),
-                        ),
+            padding: EdgeInsets.only(top: 45, left:15.0, right:15.0),
+            child: Column(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${DateFormat('EEEE').format(DateTime(widget.day.year, widget.day.month, widget.day.date))},${widget.day.date} ${DateFormat('MMMM').format(DateTime(widget.day.year, widget.day.month, widget.day.date))}:',
+                      style: GoogleFonts.rubik(
+                        fontSize: 40.0,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xFF110340),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFB12B),
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text(
-                            "mood",
-                            style: GoogleFonts.rubik(
-                              fontSize: 25,
-                              color: const Color(0xFFFFFCF2),
-                              height: 0.9,
-                            ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFB12B),
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Text(
+                          "Mood",
+                          style: GoogleFonts.rubik(
+                            fontSize: 35,
+                            color: const Color(0xFFFFFCF2),
+                            height: 1,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 20.0,),
+                    Text (
+                      'HI, i am very happy and nice. i like the color pink',
+                        style: GoogleFonts.rubik(
+                          fontSize: 25,
+                          color: const Color(0xFF482BAD),
+                          height: 0.9,
+                        )
+                    )
+                  ],
                 ),
-                ],
-              ),
+              ],
             ),
           ),
-
-          Column (
-              children: <Widget>[
-                Padding (
-                  padding: EdgeInsets.only (top: 100.0, left:15.0, right:15.0),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      "HI, i am very happy and nice. i like the color pink. ",
-                      style: GoogleFonts.rubik(
-                        fontSize: 25,
-                        color: const Color(0xFF482BAD),
-                        height: 0.9,
-                      ),
-                    ),
-                  ),
-                )
-              ]
-          )
-        ]
+        ],
       ),
     );
 

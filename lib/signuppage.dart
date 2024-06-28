@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:theproject1/auth_service.dart';
 import 'journal.dart';
 import 'loginpage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +12,11 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final _auth = AuthService();
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool isTextFieldFocused = false;
 
   @override
@@ -62,6 +68,10 @@ class _SignupPageState extends State<SignupPage> {
             child: Column(
               children: <Widget>[
                 TextField(
+                  onChanged: (text) {
+                    print('First text field: $text (${text.characters.length})');
+                    },
+                  controller: _usernameController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
@@ -74,17 +84,18 @@ class _SignupPageState extends State<SignupPage> {
                     setState(() {
                       isTextFieldFocused = true;
                     });
-                  },
-                  onChanged: (value) {
-                    setState(() {});
-                  },
+                    },
                   onSubmitted: (value) {
                     setState(() {
                       isTextFieldFocused = false;
                     });
-                  },
+                    },
                 ),
                 TextField(
+                  onChanged: (text) {
+                    print('First text field: $text (${text.characters.length})');
+                  },
+                  controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     border: UnderlineInputBorder(),
@@ -98,9 +109,6 @@ class _SignupPageState extends State<SignupPage> {
                       isTextFieldFocused = true;
                     });
                   },
-                  onChanged: (value) {
-                    setState(() {});
-                  },
                   onSubmitted: (value) {
                     setState(() {
                       isTextFieldFocused = false;
@@ -108,9 +116,13 @@ class _SignupPageState extends State<SignupPage> {
                   },
                 ),
                 TextField(
+                  onChanged: (text) {
+                    print('First text field: $text (${text.characters.length})');
+                  },
+                  controller: _passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
-                    border: UnderlineInputBorder(),
+                    border: const UnderlineInputBorder(),
                     labelText: 'Password',
                       labelStyle: GoogleFonts.rubik(
                         fontSize: 20,
@@ -120,9 +132,6 @@ class _SignupPageState extends State<SignupPage> {
                     setState(() {
                       isTextFieldFocused = true;
                     });
-                  },
-                  onChanged: (value) {
-                    setState(() {});
                   },
                   onSubmitted: (value) {
                     setState(() {
@@ -159,19 +168,12 @@ class _SignupPageState extends State<SignupPage> {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const JournalPage(),
-                            ),
-                          );
-                        },
+                        onPressed: _signup,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF482BAD),
                         ),
                         child: Text(
-                          'Login',
+                          'Sign Up',
                           style: GoogleFonts.rubik(
                             fontSize: 25,
                             color: const Color(0xFFFFFCF2),
@@ -187,5 +189,18 @@ class _SignupPageState extends State<SignupPage> {
         ],
       ),
     );
+  }
+
+  goToHome(BuildContext context) => Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const JournalPage())
+  );
+
+  _signup() async {
+    final user = await _auth.createUserWithEmailAndPassword(_emailController.text, _passwordController.text);
+    if (user != null) {
+      print("User created successfully");
+      goToHome(context);
+    }
   }
 }
