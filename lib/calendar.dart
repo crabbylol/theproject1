@@ -40,9 +40,8 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Calendar header
           Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 30.0, bottom: 35),
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 30.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -58,50 +57,53 @@ class _CalendarPageState extends State<CalendarPage> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          month--;
-                          if (month == 0) {
-                            month = 12;
-                            year--;
-                          }
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back_ios_rounded,
-                        color: Color(0xFFFFB12B),
-                        size: 30.0,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            month--;
+                            if (month == 0) {
+                              month = 12;
+                              year--;
+                            }
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.arrow_back_ios_rounded,
+                          color: Color(0xFFFFB12B),
+                          size: 35.0,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '${_getMonthName(month)} $year',
-                      style: GoogleFonts.rubik(
-                        color: const Color(0xFF482BAD),
-                        fontWeight: FontWeight.w800,
-                        fontSize: 25,
+                      Text(
+                        '${_getMonthName(month)} $year',
+                        style: GoogleFonts.rubik(
+                          color: const Color(0xFF482BAD),
+                          fontWeight: FontWeight.w800,
+                          fontSize: 30,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          month++;
-                          if (month == 13) {
-                            month = 1;
-                            year++;
-                          }
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Color(0xFFFFB12B),
-                        size: 30.0,
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            month++;
+                            if (month == 13) {
+                              month = 1;
+                              year++;
+                            }
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          color: Color(0xFFFFB12B),
+                          size: 35.0,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -110,7 +112,8 @@ class _CalendarPageState extends State<CalendarPage> {
                         (index) => Text(
                       dayNames[index],
                       style: GoogleFonts.rubik(
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
                         color: const Color(0xFF110340),
                       ),
                     ),
@@ -119,88 +122,86 @@ class _CalendarPageState extends State<CalendarPage> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 2.0),
-                    child: Stack( // Use Stack to position the calendar grid and StarrySpectrum
-                      children: [
-                        // Calendar grid
-                        GridView.builder(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 7,
-                          ),
-                          itemCount: daysInMonth.length + weekdayOffset,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (index < weekdayOffset) {
-                              return const Text(' ');
-                            }
-                            final day = daysInMonth[index - weekdayOffset];
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => DateDetailsPage(day: day)),
-                                );
-                              },
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text('${day.date}'),
-                              ),
+                    child: GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 7,
+                      ),
+                      itemCount: daysInMonth.length + weekdayOffset,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index < weekdayOffset) {
+                          return const Text(' ');
+                        }
+                        final day = daysInMonth[index - weekdayOffset];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => DateDetailsPage(day: day)),
                             );
                           },
-                        ),
-
-                        // Starry Spectrum positioned on top
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          top: 400,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Starry Spectrum',
-                                style: GoogleFonts.rubik(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xFF482BAD),
-                                ),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${day.date}',
+                              style: GoogleFonts.rubik(
+                                color: const Color(0xFF110340),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 20,
                               ),
-                              const SizedBox(height: 20.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                    color: Colors.red,
-                                    width: 100.0,
-                                    height: 100.0,
-                                  ),
-                                  Container(
-                                    color: Colors.green,
-                                    width: 100.0,
-                                    height: 100.0,
-                                  ),
-                                  Container(
-                                    color: Colors.blue,
-                                    width: 100.0,
-                                    height: 100.0,
-                                  ),
-                                ],
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   ),
                 ),
-
               ],
-      )
-    )
-    ],
-      )
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.6, // Adjust as needed
+            left: 0,
+            right: 0,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Starry Spectrum',
+                  style: GoogleFonts.rubik(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF482BAD),
+                  ),
+                ),
+                const SizedBox(height: 10.0), // Adjusted space between text and boxes
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      color: Colors.red,
+                      width: 100.0,
+                      height: 100.0,
+                    ),
+                    Container(
+                      color: Colors.green,
+                      width: 100.0,
+                      height: 100.0,
+                    ),
+                    Container(
+                      color: Colors.blue,
+                      width: 100.0,
+                      height: 100.0,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
-
 
   List<Day> _generateDaysInMonth(int year, int month) {
     List<Day> days = [];
@@ -249,8 +250,5 @@ class _CalendarPageState extends State<CalendarPage> {
 
   goToLogin(BuildContext context) => Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const LoginPageWithEmail())
-  );
+      MaterialPageRoute(builder: (context) => const LoginPageWithEmail()));
 }
-
-

@@ -85,7 +85,7 @@ class LoginPage extends StatelessWidget {
                         ),
                         child: Text(
                           'LOGIN WITH EMAIL',
-                          style: GoogleFonts.rubik( // Specify the font family here
+                          style: GoogleFonts.rubik(
                             fontSize: 18,
                             color: const Color(0xFF472bad),
                             fontWeight: FontWeight.bold,

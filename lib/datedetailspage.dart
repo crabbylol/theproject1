@@ -4,6 +4,7 @@ import 'calendar.dart'; // Assuming this is your calendar widget
 import 'day.dart'; // Assuming this is your Day data class
 import 'package:intl/intl.dart';
 import 'pastjournalentry.dart';
+import 'journal.dart';
 
 class DateDetailsPage extends StatefulWidget {
   final Day day;
@@ -147,10 +148,39 @@ class _DateDetailsPageState extends State<DateDetailsPage> {
                             ],
                           ),
                         ),
-                      )
-                    ]
-                  )
+                      ),
+                      SizedBox(
+                          height: 20
+                      ),
+                    GestureDetector(
+                        onTap: () {
+                          print('added a new journal entry');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => JournalPage(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                            height:175,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF482BAD),
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                          child:
+                            Center(
+                              child: Icon (
+                                Icons.add,
+                                size:50,
+                                  color: const Color(0xFFFFFCF2)
+                              )
+                            )
+                        ),
+                    )
+                  ]
               )
+                )
                 )
               ],
             ),

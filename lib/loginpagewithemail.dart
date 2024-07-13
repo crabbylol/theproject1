@@ -173,14 +173,7 @@ class _LoginPageWithEmailState extends State<LoginPageWithEmail> {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const JournalPage(),
-                            ),
-                          );
-                        },
+                        onPressed: _login,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF482BAD),
                         ),
