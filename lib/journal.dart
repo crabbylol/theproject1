@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:theproject1/calendardisplay.dart';
 import 'package:theproject1/database_service.dart';
@@ -10,6 +11,7 @@ import 'day.dart';
 import 'package:theproject1/auth_service.dart';
 import 'dart:math';
 import 'journalentry.dart';
+import 'prompt.dart';
 
 
 class JournalPage extends StatefulWidget {
@@ -31,6 +33,7 @@ class _JournalPageState extends State<JournalPage> {
   String currentPrompt = '';
   final TextEditingController _textEditingController = TextEditingController();
   final _dbServivce = DatabaseService();
+  final _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -53,6 +56,7 @@ class _JournalPageState extends State<JournalPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    final User? currentUser = _auth.currentUser;
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -141,7 +145,13 @@ class _JournalPageState extends State<JournalPage> {
                   Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15),
                     child: ElevatedButton(
-                      onPressed: _getNewPrompt,
+                      onPressed:() {Navigator.push(
+                          context,MaterialPageRoute(
+                          builder:
+                          (context) => PromptPage()
+                      )
+                      );
+                        },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
                         backgroundColor: const Color(0xFFD38BF5),
@@ -191,8 +201,14 @@ class _JournalPageState extends State<JournalPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       DateTime now = DateTime.now();
-                      final journalEntry = JournalEntry(dateTime: now, content: _textEditingController.text );
+                      final journalEntry = JournalEntry(dateTime: now, content: _textEditingController.text, userID: currentUser!.uid);
                       _dbServivce.create(journalEntry);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CalendarDisplayPage(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.zero,
