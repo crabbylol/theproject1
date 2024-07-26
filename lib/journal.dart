@@ -28,7 +28,7 @@ class _JournalPageState extends State<JournalPage> {
     'example prompt 1',
     'example prompt 2',
     'example prompt 3',
-    'example prompt 4example prompt 4example prompt 4example prompt 4example prompt 4example prompt 4example prompt 4',
+    'example prompt 4',
   ];
   String currentPrompt = '';
   final TextEditingController _textEditingController = TextEditingController();

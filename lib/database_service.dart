@@ -36,7 +36,7 @@ class DatabaseService {
 
       final querySnapshot = await query.get();
 
-      final entries = querySnapshot.docs.map((doc) => JournalEntry.fromMap(doc.data())).toList();
+      final entries = querySnapshot.docs.map((doc) => JournalEntry( dateTime: Timestamp.fromDate(doc['dateTime']).toDate(), content: doc['content'], userID: doc['userID'], )).toList();
 
       return entries;
     } else {
