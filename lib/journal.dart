@@ -13,7 +13,6 @@ import 'dart:math';
 import 'journalentry.dart';
 import 'prompt.dart';
 
-
 class JournalPage extends StatefulWidget {
   final Day? day;
 
@@ -24,28 +23,15 @@ class JournalPage extends StatefulWidget {
 }
 
 class _JournalPageState extends State<JournalPage> {
-  List<String> prompts = [
-    'example prompt 1',
-    'example prompt 2',
-    'example prompt 3',
-    'example prompt 4',
-  ];
-  String currentPrompt = '';
   final TextEditingController _textEditingController = TextEditingController();
   final _dbServivce = DatabaseService();
   final _auth = FirebaseAuth.instance;
+  String _selectedPrompt = '';
 
   @override
   void initState() {
     super.initState();
-    _getNewPrompt();
     _initializeTextField();
-  }
-
-  void _getNewPrompt() {
-    setState(() {
-      currentPrompt = prompts[Random().nextInt(prompts.length)];
-    });
   }
 
   void _initializeTextField() {
@@ -57,6 +43,7 @@ class _JournalPageState extends State<JournalPage> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     final User? currentUser = _auth.currentUser;
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -93,7 +80,7 @@ class _JournalPageState extends State<JournalPage> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.close, size: 55, color: Color(0xFFFFDE59)),
+                      icon: const Icon(Icons.close, size: 40, color: const Color(0xFFFFB12B)),
                     ),
                   ),
                 ],
@@ -125,33 +112,57 @@ class _JournalPageState extends State<JournalPage> {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: Column(
-                      children: [
-                        Text(
-                          currentPrompt,
-                          style: GoogleFonts.rubik(
-                            fontStyle: FontStyle.italic,
-                            fontSize: 35,
-                            color: const Color(0xFF482BAD),
-                          ),
-                        ),
-                      ],
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (_selectedPrompt.isNotEmpty)
+                            Text(
+                              _selectedPrompt,
+                              style: GoogleFonts.rubik(
+                                fontStyle: FontStyle.italic,
+                                fontSize: 35,
+                                color: const Color(0xFF482BAD),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15),
-                    child: ElevatedButton(
-                      onPressed:() {Navigator.push(
-                          context,MaterialPageRoute(
-                          builder:
-                          (context) => PromptPage()
-                      )
-                      );
-                        },
+                    ElevatedButton(
+                      onPressed: () async {
+                        final selectedPrompt = await Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => PromptPage(),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              const begin = Offset(0.0, -1.0);
+                              const end = Offset.zero;
+                              const curve = Curves.ease;
+
+                              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                              var fadeTween = Tween(begin: 0.0, end: 1.0);
+
+                              return SlideTransition(
+                                position: animation.drive(tween),
+                                child: FadeTransition(
+                                  opacity: animation.drive(fadeTween),
+                                  child: child,
+                                ),
+                              );
+                            },
+                            transitionDuration: const Duration(seconds: 1),
+                          ),
+                        );
+                        if (selectedPrompt != null) {
+                          setState(() {
+                            _selectedPrompt = selectedPrompt;
+                          });
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
                         backgroundColor: const Color(0xFFD38BF5),
@@ -162,36 +173,38 @@ class _JournalPageState extends State<JournalPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(
-                          Icons.refresh,
+                          Icons.lightbulb_outline_rounded,
                           size: 20.0,
                           color: const Color(0xFFFFFCF2),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0),
-                child: TextField(
-                  onChanged: (text) {
-                    print('journal entry: $text (${text.characters.length})');
-                  },
-                  controller: _textEditingController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    labelStyle: GoogleFonts.rubik(
-                      fontSize: 20.0,
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0),
+                  child: TextField(
+                    onChanged: (text) {
+                      print('journal entry: $text (${text.characters.length})');
+                    },
+                    controller: _textEditingController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelStyle: GoogleFonts.rubik(
+                        fontSize: 20.0,
+                      ),
+                      filled: true,
+                      fillColor: const Color(0xFFFFF6D4),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: const Color(0xFFFFB12B), width: 2),
+                      ),
                     ),
-                    filled: true,
-                    fillColor: const Color(0xFFFFF6D4),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: const Color(0xFFFFB12B), width: 2),
-                    ),
+                    maxLines: 20,
+                    minLines: 19,
                   ),
-                  maxLines: 20,
-                  minLines: 5,
                 ),
               ),
               Padding(

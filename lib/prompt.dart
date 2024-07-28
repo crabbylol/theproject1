@@ -15,6 +15,7 @@ class _PromptPageState extends State<PromptPage> {
     "Write a poem about a journey.",
     "Draw a picture inspired by music.",
     "Create a story with a surprising twist.",
+    "Create a story with a surprising twist.",
   ];
   int currentPromptIndex = 0; // Index of the current prompt
 
@@ -86,26 +87,21 @@ class _PromptPageState extends State<PromptPage> {
                       const SizedBox(height: 100.0),
                       IconButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const JournalPage(),
-                            ),
-                          );
+                          Navigator.pop(context, prompts[currentPromptIndex]);
                         },
                         icon: const Icon(
                           Icons.arrow_downward,
-                          size:50,
+                          size: 50,
                           color: Color(0xFFD38BF5),
                         ),
                       ),
                     ],
                   ),
                 ],
-          ),
+              ),
             ),
-      ),
-          ]
+          ),
+        ],
       ),
     );
   }

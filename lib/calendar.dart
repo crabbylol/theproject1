@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart'; // for _getMonthName
+import 'package:intl/intl.dart';
 import 'package:theproject1/auth_service.dart';
 import 'package:theproject1/datedetailspage.dart';
 import 'package:theproject1/day.dart';
@@ -38,168 +38,176 @@ class _CalendarPageState extends State<CalendarPage> {
     final weekdayOffset = (firstDay.weekday - DateTime.monday) % 7;
 
     return Scaffold(
-      body: Stack(
+      body: Center(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildLogoutButton(_auth, context),
+                  _buildMonthNavigation(),
+                  _buildDayNames(dayNames),
+                  _buildDaysGrid(daysInMonth, weekdayOffset),
+                ],
+              ),
+            ),
+            _buildFooter(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLogoutButton(AuthService auth, BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        IconButton(
+          onPressed: () async {
+            await auth.signout();
+            goToLogin(context);
+          },
+          icon: const Icon(Icons.logout_rounded, size: 25, color: Color(0xFF482BAD)),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMonthNavigation() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 30.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        await _auth.signout();
-                        goToLogin(context);
-                      },
-                      icon: const Icon(Icons.logout_rounded, size: 25, color: Color(0xFF482BAD)),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            month--;
-                            if (month == 0) {
-                              month = 12;
-                              year--;
-                            }
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back_ios_rounded,
-                          color: Color(0xFFFFB12B),
-                          size: 35.0,
-                        ),
-                      ),
-                      Text(
-                        '${_getMonthName(month)} $year',
-                        style: GoogleFonts.rubik(
-                          color: const Color(0xFF482BAD),
-                          fontWeight: FontWeight.w800,
-                          fontSize: 30,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            month++;
-                            if (month == 13) {
-                              month = 1;
-                              year++;
-                            }
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: Color(0xFFFFB12B),
-                          size: 35.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: List.generate(
-                    7,
-                        (index) => Text(
-                      dayNames[index],
-                      style: GoogleFonts.rubik(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                        color: const Color(0xFF110340),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 2.0),
-                    child: GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 7,
-                      ),
-                      itemCount: daysInMonth.length + weekdayOffset,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (index < weekdayOffset) {
-                          return const Text(' ');
-                        }
-                        final day = daysInMonth[index - weekdayOffset];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => DateDetailsPage(day: day)),
-                            );
-                          },
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              '${day.date}',
-                              style: GoogleFonts.rubik(
-                                color: const Color(0xFF110340),
-                                fontWeight: FontWeight.w400,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
+          IconButton(
+            onPressed: () {
+              setState(() {
+                month--;
+                if (month == 0) {
+                  month = 12;
+                  year--;
+                }
+              });
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios_rounded,
+              color: Color(0xFFFFB12B),
+              size: 35.0,
             ),
           ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.6, // Adjust as needed
-            left: 0,
-            right: 0,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Starry Spectrum',
-                  style: GoogleFonts.rubik(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500,
-                    color: const Color(0xFF482BAD),
-                  ),
-                ),
-                const SizedBox(height: 10.0), // Adjusted space between text and boxes
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      color: Colors.red,
-                      width: 100.0,
-                      height: 100.0,
-                    ),
-                    Container(
-                      color: Colors.green,
-                      width: 100.0,
-                      height: 100.0,
-                    ),
-                    Container(
-                      color: Colors.blue,
-                      width: 100.0,
-                      height: 100.0,
-                    ),
-                  ],
-                ),
-              ],
+          Text(
+            '${_getMonthName(month)} $year',
+            style: GoogleFonts.rubik(
+              color: const Color(0xFF482BAD),
+              fontWeight: FontWeight.w800,
+              fontSize: 30,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                month++;
+                if (month == 13) {
+                  month = 1;
+                  year++;
+                }
+              });
+            },
+            icon: const Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: Color(0xFFFFB12B),
+              size: 35.0,
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildDayNames(List<String> dayNames) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: dayNames.map((name) {
+        return Text(
+          name,
+          style: GoogleFonts.rubik(
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+            color: const Color(0xFF110340),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildDaysGrid(List<Day> daysInMonth, int weekdayOffset) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 7,
+          ),
+          itemCount: daysInMonth.length + weekdayOffset,
+          itemBuilder: (BuildContext context, int index) {
+            if (index < weekdayOffset) {
+              return const SizedBox.shrink();
+            }
+            final day = daysInMonth[index - weekdayOffset];
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DateDetailsPage(day: day)),
+                );
+              },
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  '${day.date}',
+                  style: GoogleFonts.rubik(
+                    color: const Color(0xFF110340),
+                    fontWeight: FontWeight.w400,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFooter() {
+    return Positioned(
+      top: MediaQuery.of(context).size.height * 0.6,
+      left: 0,
+      right: 0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildColorBox(Colors.red),
+              _buildColorBox(Colors.green),
+              _buildColorBox(Colors.blue),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildColorBox(Color color) {
+    return Container(
+      color: color,
+      width: 100.0,
+      height: 100.0,
     );
   }
 
@@ -248,7 +256,10 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
-  goToLogin(BuildContext context) => Navigator.push(
+  void goToLogin(BuildContext context) {
+    Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const LoginPageWithEmail()));
+      MaterialPageRoute(builder: (context) => const LoginPageWithEmail()),
+    );
+  }
 }
