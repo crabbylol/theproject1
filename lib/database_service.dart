@@ -23,9 +23,10 @@ class DatabaseService {
 
   Future<List<JournalEntry>> getJournalEntriesByDate(DateTime selectedDate) async {
     final User? currentUser = _auth.currentUser;
+    final selectedDateUtc = selectedDate.toUtc();
 
     if (currentUser != null) {
-      final DateTime startDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+      final DateTime startDate = DateTime(selectedDateUtc.year, selectedDateUtc.month, selectedDateUtc.day);
       final DateTime endDate = startDate.add(const Duration(days: 1));
 
       print(currentUser.uid);
@@ -39,6 +40,8 @@ class DatabaseService {
         .where('dateTime', isLessThan: Timestamp.fromDate(endDate));
 
       final querySnapshot = await query.get();
+
+      print("Number of entries retrieved: ${querySnapshot.docs.length}");
 
       final entries = querySnapshot.docs.map((doc) => JournalEntry( dateTime: Timestamp.fromDate(doc['dateTime']).toDate(), content: doc['content'], userID: doc['userID'], )).toList();
 
