@@ -28,6 +28,10 @@ class DatabaseService {
       final DateTime startDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
       final DateTime endDate = startDate.add(const Duration(days: 1));
 
+      print(currentUser.uid);
+      print(Timestamp.fromDate(startDate));
+      print(Timestamp.fromDate(endDate));
+
       final query = _fire
         .collection("journalEntries")
         .where('userID', isEqualTo: currentUser.uid)

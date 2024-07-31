@@ -90,6 +90,29 @@ class _DateDetailsPageState extends State<DateDetailsPage> {
                   Expanded(
                     child: ListView(
                       children: [
+                        FutureBuilder<List<JournalEntry>>(
+                        future: todayEntries,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text("Error: ${snapshot.error}");
+                              } else if (snapshot.hasData) {
+                                final entries = snapshot.data!;
+                                print("List Length: ${entries.length}");
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: entries.length,
+                                  itemBuilder: (context, index) {
+                                    final entry = entries[index];
+                                    return Text(entry.content);
+                                  }
+                                );
+                              } else {
+                                return const Text("Something went wrong");
+                              }
+                            }
+                        ),
                         // GestureDetector(
                         //   onTap: () {
                         //     Navigator.push(
