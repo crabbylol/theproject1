@@ -18,9 +18,35 @@ class DateDetailsPage extends StatefulWidget {
 
 class _DateDetailsPageState extends State<DateDetailsPage> {
   final _dbServivce = DatabaseService();
-  DateTime todayDate = DateTime(widget.day.year, widget.day.month, widget.day.date);
+  DateTime todayDate = DateTime(0,0,0);
+  Future<List<JournalEntry>>? todayEntries;
 
-  Future<List<JournalEntry>> todayEntries = _dbServivce.getJournalEntriesByDate(todayDate);
+  @override
+  void initState() {
+    super.initState();
+    todayDate = DateTime(widget.day.year, widget.day.month, widget.day.date);
+    todayEntries = _dbServivce.getJournalEntriesByDate(todayDate);
+
+    // FutureBuilder<List<JournalEntry>>(
+    //   future: todayEntries,
+    //   builder: (context, snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.waiting) {
+    //       return const CircularProgressIndicator();
+    //     } else if (snapshot.hasError) {
+    //       return Text("Error: ${snapshot.error}");
+    //     } else if (snapshot.hasData) {
+    //       final entries = snapshot.data!;
+    //       entries.forEach((entry) {
+    //         print(entry.toString());
+    //       });
+    //       print("It Works");
+    //       return Text("It Works!");
+    //     } else {
+    //       return const Text("Something went wrong");
+    //     }
+    //   }
+    // );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,100 +90,53 @@ class _DateDetailsPageState extends State<DateDetailsPage> {
                   Expanded(
                     child: ListView(
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PastJournalEntryPage(day: widget.day),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            height: 175,
-                            margin: const EdgeInsets.only(bottom: 20),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFB12B),
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            child: Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Text(
-                                      '12:12',
-                                      style: GoogleFonts.rubik(
-                                        fontSize: 90,
-                                        color: const Color(0xFFFFFCF2),
-                                        height: 0.9,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Text(
-                                    'AM',
-                                    style: GoogleFonts.rubik(
-                                      fontSize: 190,
-                                      color: const Color(0xFFFFFCF2).withOpacity(0.25),
-                                      height: 0.9,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PastJournalEntryPage(day: widget.day),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            height: 175,
-                            margin: const EdgeInsets.only(bottom: 20),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFB12B),
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            child: Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Text(
-                                      '12:12',
-                                      style: GoogleFonts.rubik(
-                                        fontSize: 90,
-                                        color: const Color(0xFFFFFCF2),
-                                        height: 0.9,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Text(
-                                    'AM',
-                                    style: GoogleFonts.rubik(
-                                      fontSize: 190,
-                                      color: const Color(0xFFFFFCF2).withOpacity(0.25),
-                                      height: 0.9,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (context) => PastJournalEntryPage(day: widget.day),
+                        //       ),
+                        //     );
+                        //   },
+                        //   child: Container(
+                        //     height: 175,
+                        //     margin: const EdgeInsets.only(bottom: 20),
+                        //     decoration: BoxDecoration(
+                        //       color: const Color(0xFFFFB12B),
+                        //       borderRadius: BorderRadius.circular(30.0),
+                        //     ),
+                        //     child: Stack(
+                        //       children: [
+                        //         Align(
+                        //           alignment: Alignment.bottomLeft,
+                        //           child: Padding(
+                        //             padding: const EdgeInsets.all(10.0),
+                        //             child: Text(
+                        //               '12:12',
+                        //               style: GoogleFonts.rubik(
+                        //                 fontSize: 90,
+                        //                 color: const Color(0xFFFFFCF2),
+                        //                 height: 0.9,
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //         Align(
+                        //           alignment: Alignment.bottomRight,
+                        //           child: Text(
+                        //             'AM',
+                        //             style: GoogleFonts.rubik(
+                        //               fontSize: 190,
+                        //               color: const Color(0xFFFFFCF2).withOpacity(0.25),
+                        //               height: 0.9,
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
