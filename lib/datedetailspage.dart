@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'database_service.dart';
 import 'day.dart';
+import 'journalentry.dart';
 import 'pastjournalentry.dart';
 import 'journal.dart';
 
@@ -15,6 +17,11 @@ class DateDetailsPage extends StatefulWidget {
 }
 
 class _DateDetailsPageState extends State<DateDetailsPage> {
+  final _dbServivce = DatabaseService();
+  DateTime todayDate = DateTime(widget.day.year, widget.day.month, widget.day.date);
+
+  Future<List<JournalEntry>> todayEntries = _dbServivce.getJournalEntriesByDate(todayDate);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
