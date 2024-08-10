@@ -12,7 +12,7 @@ class DatabaseService {
     //final User? currentUser = _auth.currentUser;
     try {
       _fire.collection("journalEntries").add({
-        "dateTIme": Timestamp.fromDate(journalEntry.dateTime),
+        "dateTime": Timestamp.fromDate(journalEntry.dateTime),
         "content": journalEntry.content,
         "userID": journalEntry.userID
       });
@@ -41,9 +41,15 @@ class DatabaseService {
 
       final querySnapshot = await query.get();
 
-      print("Number of entries retrieved: ${querySnapshot.docs.length}");
+      //print("Number of entries retrieved: ${querySnapshot.docs.length}");
 
-      final entries = querySnapshot.docs.map((doc) => JournalEntry( dateTime: Timestamp.fromDate(doc['dateTime']).toDate(), content: doc['content'], userID: doc['userID'], )).toList();
+      final entries = querySnapshot.docs.map((doc) {
+        return JournalEntry(
+          dateTime: (doc['dateTime'] as Timestamp).toDate(),
+          content: doc['content'],
+          userID: doc['userID'],
+        );
+      }).toList();
 
       return entries;
     } else {

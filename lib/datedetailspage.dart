@@ -60,9 +60,7 @@ class _DateDetailsPageState extends State<DateDetailsPage> {
               width: double.infinity,
               color: const Color(0xFFFFFCF2),
             ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
+            Column(
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,13 +97,65 @@ class _DateDetailsPageState extends State<DateDetailsPage> {
                                 return Text("Error: ${snapshot.error}");
                               } else if (snapshot.hasData) {
                                 final entries = snapshot.data!;
-                                print("List Length: ${entries.length}");
+                                //print("List Length: ${entries.length}");
                                 return ListView.builder(
                                   shrinkWrap: true,
                                   itemCount: entries.length,
                                   itemBuilder: (context, index) {
                                     final entry = entries[index];
-                                    return Text(entry.content);
+                                    final DateTime entryDateTime = entry.dateTime;
+                                    final formatter = DateFormat('h');
+                                    final hour = formatter.format(entryDateTime);
+                                    final min = entryDateTime.minute;
+                                    final String formattedMin = entryDateTime.minute > 9 ? '$min' : '0$min';
+                                    final String amPm = entryDateTime.hour >= 12 ? 'PM' : 'AM';
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => PastJournalEntryPage(day: widget.day, dateTime: entry.dateTime, content: entry.content),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 175,
+                                        margin: const EdgeInsets.only(bottom: 20),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFFFB12B),
+                                          borderRadius: BorderRadius.circular(30.0),
+                                        ),
+                                        child: Stack(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.bottomLeft,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Text(
+                                                  '$hour:$formattedMin',
+                                                  style: GoogleFonts.rubik(
+                                                    fontSize: 90,
+                                                    color: const Color(0xFFFFFCF2),
+                                                    height: 0.9,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.bottomRight,
+                                              child: Text(
+                                                '$amPm',
+                                                style: GoogleFonts.rubik(
+                                                  fontSize: 190,
+                                                  color: const Color(0xFFFFFCF2).withOpacity(0.25),
+                                                  height: 0.9,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
                                   }
                                 );
                               } else {
@@ -113,53 +163,6 @@ class _DateDetailsPageState extends State<DateDetailsPage> {
                               }
                             }
                         ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(
-                        //         builder: (context) => PastJournalEntryPage(day: widget.day),
-                        //       ),
-                        //     );
-                        //   },
-                        //   child: Container(
-                        //     height: 175,
-                        //     margin: const EdgeInsets.only(bottom: 20),
-                        //     decoration: BoxDecoration(
-                        //       color: const Color(0xFFFFB12B),
-                        //       borderRadius: BorderRadius.circular(30.0),
-                        //     ),
-                        //     child: Stack(
-                        //       children: [
-                        //         Align(
-                        //           alignment: Alignment.bottomLeft,
-                        //           child: Padding(
-                        //             padding: const EdgeInsets.all(10.0),
-                        //             child: Text(
-                        //               '12:12',
-                        //               style: GoogleFonts.rubik(
-                        //                 fontSize: 90,
-                        //                 color: const Color(0xFFFFFCF2),
-                        //                 height: 0.9,
-                        //               ),
-                        //             ),
-                        //           ),
-                        //         ),
-                        //         Align(
-                        //           alignment: Alignment.bottomRight,
-                        //           child: Text(
-                        //             'AM',
-                        //             style: GoogleFonts.rubik(
-                        //               fontSize: 190,
-                        //               color: const Color(0xFFFFFCF2).withOpacity(0.25),
-                        //               height: 0.9,
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -189,7 +192,6 @@ class _DateDetailsPageState extends State<DateDetailsPage> {
                   ),
                 ],
               ),
-            ),
           ],
         ),
       ),

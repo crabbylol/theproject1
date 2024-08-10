@@ -43,17 +43,12 @@ class _CalendarPageState extends State<CalendarPage> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildLogoutButton(_auth, context),
-                  _buildMonthNavigation(),
-                  _buildDayNames(dayNames),
-                  _buildDaysGrid(daysInMonth, weekdayOffset),
-                ],
+              child: _buildMonthNavigation(
+                dayNames: dayNames,
+                daysInMonth: daysInMonth,
+                weekdayOffset: weekdayOffset,
               ),
             ),
-            _buildFooter(),
           ],
         ),
       ),
@@ -75,77 +70,76 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  Widget _buildMonthNavigation() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+  Widget _buildMonthNavigation({required List<String> dayNames, required List<Day> daysInMonth, required int weekdayOffset}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(0xFF110340),
+        borderRadius: BorderRadius.circular(35),
+      ),
+      padding: EdgeInsets.all(20.0),
+      child: Column(
         children: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                month--;
-                if (month == 0) {
-                  month = 12;
-                  year--;
-                }
-              });
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios_rounded,
-              color: Color(0xFFFFB12B),
-              size: 35.0,
+          _buildLogoutButton(AuthService(), context),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      month--;
+                      if (month == 0) {
+                        month = 12;
+                        year--;
+                      }
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: Color(0xFFFFFCF2),
+                    size: 35.0,
+                  ),
+                ),
+                Text(
+                  '${_getMonthName(month)} $year',
+                  style: GoogleFonts.rubik(
+                    color: const Color(0xFFFFB12B),
+                    fontWeight: FontWeight.w800,
+                    fontSize: 30,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      month++;
+                      if (month == 13) {
+                        month = 1;
+                        year++;
+                      }
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: Color(0xFFFFFCF2),
+                    size: 35.0,
+                  ),
+                ),
+              ],
             ),
           ),
-          Text(
-            '${_getMonthName(month)} $year',
-            style: GoogleFonts.rubik(
-              color: const Color(0xFF482BAD),
-              fontWeight: FontWeight.w800,
-              fontSize: 30,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                month++;
-                if (month == 13) {
-                  month = 1;
-                  year++;
-                }
-              });
-            },
-            icon: const Icon(
-              Icons.arrow_forward_ios_rounded,
-              color: Color(0xFFFFB12B),
-              size: 35.0,
-            ),
-          ),
+          _buildDayNames(dayNames),
+          _buildDaysGrid(daysInMonth, weekdayOffset),
+          _buildFooter(),
         ],
       ),
-    );
-  }
-
-  Widget _buildDayNames(List<String> dayNames) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: dayNames.map((name) {
-        return Text(
-          name,
-          style: GoogleFonts.rubik(
-            fontWeight: FontWeight.w500,
-            fontSize: 20,
-            color: const Color(0xFF110340),
-          ),
-        );
-      }).toList(),
     );
   }
 
   Widget _buildDaysGrid(List<Day> daysInMonth, int weekdayOffset) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(top: 8.0),
+        padding: const EdgeInsets.only(top: 8.0, bottom: 20.0), // Add 20 px padding at the bottom
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 7,
@@ -168,7 +162,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 child: Text(
                   '${day.date}',
                   style: GoogleFonts.rubik(
-                    color: const Color(0xFF110340),
+                    color: const Color(0xFFFFFCF2),
                     fontWeight: FontWeight.w400,
                     fontSize: 20,
                   ),
@@ -181,26 +175,42 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
+  Widget _buildDayNames(List<String> dayNames) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: dayNames.map((name) {
+        return Text(
+          name,
+          style: GoogleFonts.rubik(
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+            color: const Color(0xFFFFFCF2),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
   Widget _buildFooter() {
     return Positioned(
-      top: MediaQuery.of(context).size.height * 0.6,
+      bottom: 0,
       left: 0,
       right: 0,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildColorBox(Colors.red),
-              _buildColorBox(Colors.green),
-              _buildColorBox(Colors.blue),
-            ],
-          ),
-        ],
-      ),
-    );
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildColorBox(Colors.red),
+                _buildColorBox(Colors.green),
+                _buildColorBox(Colors.blue),
+              ],
+            ),
+          ],
+        ),
+      );
   }
 
   Widget _buildColorBox(Color color) {
