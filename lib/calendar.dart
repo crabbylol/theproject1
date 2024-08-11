@@ -5,6 +5,7 @@ import 'package:theproject1/auth_service.dart';
 import 'package:theproject1/datedetailspage.dart';
 import 'package:theproject1/day.dart';
 import 'package:theproject1/loginpagewithemail.dart';
+import 'journal.dart';
 
 class CalendarPage extends StatefulWidget {
   final int initialYear;
@@ -41,8 +42,12 @@ class _CalendarPageState extends State<CalendarPage> {
       body: Center(
         child: Stack(
           children: [
+            Padding (
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 32.0),
+              child:_buildLogoutButton(AuthService(), context),
+            ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 115.0, bottom: 50.0),
               child: _buildMonthNavigation(
                 dayNames: dayNames,
                 daysInMonth: daysInMonth,
@@ -54,17 +59,63 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
     );
   }
-
   Widget _buildLogoutButton(AuthService auth, BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        IconButton(
-          onPressed: () async {
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => JournalPage(),
+              ),
+            );
+          },
+          child: Container(
+            height: 55,
+            width: 55,
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFB12B),
+              shape: BoxShape.circle,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Icon(
+                  Icons.add,
+                  size: 40,
+                  color: const Color(0xFFFFFCF2),
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 18.0),
+        GestureDetector(
+          onTap: () async {
             await auth.signout();
             goToLogin(context);
           },
-          icon: const Icon(Icons.logout_rounded, size: 25, color: Color(0xFF482BAD)),
+          child: Container(
+            height: 55,
+            width: 55,
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFB12B),
+              shape: BoxShape.circle,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Icon(
+                  Icons.logout_rounded,
+                  size: 41,
+                  color: const Color(0xFFFFFCF2),
+                ),
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -76,10 +127,9 @@ class _CalendarPageState extends State<CalendarPage> {
         color: Color(0xFF110340),
         borderRadius: BorderRadius.circular(35),
       ),
-      padding: EdgeInsets.all(20.0),
+      padding: EdgeInsets.only(top:55.0, left: 20.0, right: 20),
       child: Column(
         children: [
-          _buildLogoutButton(AuthService(), context),
           Padding(
             padding: const EdgeInsets.only(bottom: 15.0),
             child: Row(
@@ -192,26 +242,30 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Widget _buildFooter() {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
+    return Container(
+        decoration: BoxDecoration(
+        color: Color(0xFF110340),
+    borderRadius: BorderRadius.circular(35),
+    ), child: Container(
+      margin: const EdgeInsets.only(bottom: 95.0),
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildColorBox(Colors.red),
-                _buildColorBox(Colors.green),
-                _buildColorBox(Colors.blue),
-              ],
-            ),
-          ],
-        ),
-      );
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildColorBox(Colors.red),
+              _buildColorBox(Colors.green),
+              _buildColorBox(Colors.blue),
+            ],
+          ),
+        ],
+      ),
+    ),
+    );
   }
+
 
   Widget _buildColorBox(Color color) {
     return Container(
