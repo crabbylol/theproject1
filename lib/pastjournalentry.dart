@@ -68,35 +68,37 @@ class _PastJournalEntryPageState extends State<PastJournalEntryPage> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
-                  Row (
-                    children: <Widget> [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(20.0),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFF6D4),
-                            borderRadius: BorderRadius.circular(20.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.3),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: SingleChildScrollView(
-                            child: Text(
-                              widget.content,
-                              style: GoogleFonts.rubik(
-                                fontSize: 25,
-                                color: const Color(0xFF482BAD),
-                              ),
+                  Expanded(
+                    child: Row (
+                      children: <Widget> [
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(20.0),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFF6D4),
+                              borderRadius: BorderRadius.circular(20.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: SingleChildScrollView(
+                              child: Text(
+                                widget.content,
+                                style: GoogleFonts.rubik(
+                                  fontSize: 24,
+                                  color: const Color(0xFF482BAD),
+                                ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
