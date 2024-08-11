@@ -18,7 +18,7 @@ class DateDetailsPage extends StatefulWidget {
 
 class _DateDetailsPageState extends State<DateDetailsPage> {
   final _dbServivce = DatabaseService();
-  DateTime todayDate = DateTime(0,0,0);
+  DateTime todayDate = DateTime(0, 0, 0);
   Future<List<JournalEntry>>? todayEntries;
 
   @override
@@ -26,79 +26,59 @@ class _DateDetailsPageState extends State<DateDetailsPage> {
     super.initState();
     todayDate = DateTime(widget.day.year, widget.day.month, widget.day.date);
     todayEntries = _dbServivce.getJournalEntriesByDate(todayDate);
-
-    // FutureBuilder<List<JournalEntry>>(
-    //   future: todayEntries,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.waiting) {
-    //       return const CircularProgressIndicator();
-    //     } else if (snapshot.hasError) {
-    //       return Text("Error: ${snapshot.error}");
-    //     } else if (snapshot.hasData) {
-    //       final entries = snapshot.data!;
-    //       entries.forEach((entry) {
-    //         print(entry.toString());
-    //       });
-    //       print("It Works");
-    //       return Text("It Works!");
-    //     } else {
-    //       return const Text("Something went wrong");
-    //     }
-    //   }
-    // );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              color: const Color(0xFFFFFCF2),
-            ),
-            Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${DateFormat('E, MMM d, yyyy').format(DateTime(widget.day.year, widget.day.month, widget.day.date))}:',
-                          style: GoogleFonts.rubik(
-                            fontSize: 35.0,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.w400,
-                            color: const Color(0xFF110340),
-                          ),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            color: const Color(0xFFFFFCF2),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0), // Add padding here
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${DateFormat('E, MMM d, yyyy').format(DateTime(widget.day.year, widget.day.month, widget.day.date))}:',
+                        style: GoogleFonts.rubik(
+                          fontSize: 35.0,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFF110340),
                         ),
                       ),
-                      IconButton(
-                        icon: Icon(Icons.close, size: 40, color: const Color(0xFFFFB12B)),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Expanded(
-                    child: ListView(
-                      children: [
-                        FutureBuilder<List<JournalEntry>>(
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.close, size: 40, color: const Color(0xFFFFB12B)),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      FutureBuilder<List<JournalEntry>>(
                         future: todayEntries,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return const CircularProgressIndicator();
-                              } else if (snapshot.hasError) {
-                                return Text("Error: ${snapshot.error}");
-                              } else if (snapshot.hasData) {
-                                final entries = snapshot.data!;
-                                //print("List Length: ${entries.length}");
-                                return ListView.builder(
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text("Error: ${snapshot.error}");
+                            } else if (snapshot.hasData) {
+                              final entries = snapshot.data!;
+                              //print("List Length: ${entries.length}");
+                              return ListView.builder(
                                   shrinkWrap: true,
                                   itemCount: entries.length,
                                   itemBuilder: (context, index) {
@@ -157,44 +137,20 @@ class _DateDetailsPageState extends State<DateDetailsPage> {
                                       ),
                                     );
                                   }
-                                );
-                              } else {
-                                return const Text("Something went wrong");
-                              }
+                              );
+                            } else {
+                              return const Text("Something went wrong");
                             }
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => JournalPage(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            height: 175,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF482BAD),
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            child: Center(
-                              child: Icon(
-                                Icons.add,
-                                size: 50,
-                                color: const Color(0xFFFFFCF2),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                          }
+                      ),
+                    ],
                   ),
-                ],
-              ),
-          ],
-        ),
-      ),
+                ),
+              ],
+            ),
+          )
+            ],
+          ),
     );
   }
 }
