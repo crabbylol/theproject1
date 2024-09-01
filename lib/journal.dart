@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:theproject1/calendardisplay.dart';
 import 'package:theproject1/database_service.dart';
 import 'package:theproject1/journalentry.dart';
@@ -12,6 +13,7 @@ import 'package:theproject1/auth_service.dart';
 import 'dart:math';
 import 'journalentry.dart';
 import 'prompt.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class JournalPage extends StatefulWidget {
   final Day? day;
@@ -23,10 +25,54 @@ class JournalPage extends StatefulWidget {
 }
 
 class _JournalPageState extends State<JournalPage> {
+  late final model = GenerativeModel(
+    apiKey: dotenv.env['OPENAI_API_KEY']!, model: 'gemini-pro');
+
+  List<String> emotions = [];
+  String resultEmotions = '';
+  String advice = '';
+
   final TextEditingController _textEditingController = TextEditingController();
   final _dbServivce = DatabaseService();
   final _auth = FirebaseAuth.instance;
   String _selectedPrompt = '';
+
+  Future<void> geminiFunctionCalling() async {
+    print("Running analysis");
+    String systemPrompt =
+        "Act as a therapist and analyze the user's journal entry. Provide me with five emotions the user is feeling. Don’t need to give a reason behind why that user is feeling those emotion";
+    String userPrompt =
+        'Here is the journal entry: ${_textEditingController.text}'
+        'Please only return the result in a string that only includes the words separated by commas';
+
+    String userPrompt_advice = "Next, analysis this journal entry again. If the emotions are positive give encouraging words and ways to keep those positive emotions up. If emotions are negative give a 5 step actionable plan to do over the course of a week that is backed up by scientific evidence to improve those emotions while giving words of affirmation at the end.";
+
+    final chat = model.startChat(history: [
+      Content.text(userPrompt),
+      Content.model([TextPart(systemPrompt)])
+    ]);
+
+    final message = userPrompt;
+    final response = await chat.sendMessage(Content.text(message));
+
+    print("Analysis ran, printing result:");
+    resultEmotions = response.text!;
+    print("Result printed.");
+
+    final getAdvice = userPrompt_advice;
+    final response_advice = await chat.sendMessage(Content.text(getAdvice));
+
+    advice = response_advice.text!;
+    //print(advice);
+
+    if (!mounted) return;
+
+    setState(() {
+      emotions = resultEmotions.split(',');
+      emotions = emotions.map((emotion) => emotion.trim()).toList();
+      //print(emotions);
+    });
+  }
 
   @override
   void initState() {
@@ -186,9 +232,9 @@ class _JournalPageState extends State<JournalPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0),
                   child: TextField(
-                    onChanged: (text) {
-                      print('journal entry: $text (${text.characters.length})');
-                    },
+                    // onChanged: (text) {
+                    //   print('journal entry: $text (${text.characters.length})');
+                    // },
                     controller: _textEditingController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
@@ -212,9 +258,10 @@ class _JournalPageState extends State<JournalPage> {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       DateTime now = DateTime.now();
-                      final journalEntry = JournalEntry(dateTime: now, content: _textEditingController.text, userID: currentUser!.uid);
+                      await geminiFunctionCalling();
+                      final journalEntry = JournalEntry(dateTime: now, content: _textEditingController.text.trim(), userID: currentUser!.uid, emotions: emotions);
                       _dbServivce.create(journalEntry);
                       Navigator.push(
                         context,
